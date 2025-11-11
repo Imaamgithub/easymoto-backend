@@ -1,0 +1,13 @@
+%% Architecture diagram for EasyMoto
+flowchart LR
+  C[Customer App] -->|create order| DB[(Firebase Realtime DB /orders)]
+  DB -->|onCreate| CF[Cloud Function autoDispatchOnOrderCreate]
+  CF -->|query| RIDERS[/riders/ (lat,lng,available)]
+  CF -->|Distance Matrix| GMAP[Google Distance Matrix API]
+  GMAP --> CF
+  CF -->|transaction| RIDER_NODE[/riders/{riderId}]
+  CF -->|update| DB
+  CF -->|notify| NOTIF[FCM / Expo Push]
+  RIDER_APP[Rider App] -->|location updates| DB
+  ADMIN[Admin Dashboard] -->|reads| DB
+  ANALYTICS[BigQuery / Data Studio] -->|ingest| DB

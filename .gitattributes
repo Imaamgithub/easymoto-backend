@@ -1,0 +1,11 @@
+# Mark archive files as binary so editors and patches don't try to open/normalize them
+# Keep archives out of text normalization and avoid "open anyway" prompts in editors
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.gz binary
+*.rar binary
+*.jar binary
+*.7z binary
+

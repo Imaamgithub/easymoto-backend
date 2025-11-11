@@ -1,0 +1,23 @@
+%% Dispatch flow sequence
+sequenceDiagram
+  participant Customer
+  participant RealtimeDB
+  participant CloudFunction
+  participant GoogleMatrix
+  participant RidersNode
+  participant RiderApp
+  participant Admin
+
+  Customer->>RealtimeDB: push new order (pickup coords)
+  RealtimeDB->>CloudFunction: onCreate(order)
+  CloudFunction->>RidersNode: read available riders
+  CloudFunction->>GoogleMatrix: ETA matrix (orig=pickup,dests=riders)
+  GoogleMatrix-->>CloudFunction: ETA results
+  CloudFunction->>RidersNode: transaction(reserve rider)
+  CloudFunction->>RealtimeDB: update order.assignedRiderId,status=Assigned
+  CloudFunction->>RiderApp: push notification (new order)
+  RiderApp->>RealtimeDB: accept/update location
+  RealtimeDB->>CloudFunction: onRiderNodeChange -> compute ETA update
+  CloudFunction->>RealtimeDB: update order.etaSeconds
+  CloudFunction->>Customer: proximity push when near destination
+  Admin->>RealtimeDB: monitor orders & riders
