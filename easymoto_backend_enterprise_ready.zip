@@ -1,0 +1,285 @@
+# Define the enterprise-ready Easymoto backend project structure with files and content
+
+enterprise_project_files = {
+
+    "package.json": """
+
+{
+
+  "name": "easymoto-backend",
+
+  "version": "1.0.0",
+
+  "description": "Backend for Easymoto delivery, travel, and logistics platform",
+
+  "main": "dist/index.js",
+
+  "scripts": {
+
+    "clean": "rm -rf dist",
+
+    "build": "npm run clean && tsc",
+
+    "start": "node dist/index.js",
+
+    "dev": "npm run lint && ts-node-dev --respawn --transpile-only --ignore-watch node_modules --poll src/index.ts",
+
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+
+    "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
+
+    "prestart": "npm run build"
+
+  },
+
+  "keywords": ["easymoto", "delivery", "logistics", "backend"],
+
+  "author": "Your Name",
+
+  "license": "MIT",
+
+  "dependencies": {
+
+    "express": "^4.18.2",
+
+    "cors": "^2.8.5",
+
+    "dotenv": "^16.3.1"
+
+  },
+
+  "devDependencies": {
+
+    "typescript": "^5.2.2",
+
+    "ts-node-dev": "^2.0.0",
+
+    "@types/node": "^20.5.9",
+
+    "@types/express": "^4.17.19",
+
+    "eslint": "^8.50.0",
+
+    "@typescript-eslint/parser": "^6.3.0",
+
+    "@typescript-eslint/eslint-plugin": "^6.3.0"
+
+  }
+
+}
+
+""",
+
+    "tsconfig.json": """
+
+{
+
+  "compilerOptions": {
+
+    "target": "ES2020",
+
+    "module": "commonjs",
+
+    "outDir": "./dist",
+
+    "rootDir": "./src",
+
+    "strict": true,
+
+    "esModuleInterop": true,
+
+    "forceConsistentCasingInFileNames": true,
+
+    "skipLibCheck": true,
+
+    "sourceMap": true
+
+  },
+
+  "include": ["src/**/*"],
+
+  "exclude": ["node_modules", "dist"]
+
+}
+
+""",
+
+    "src/index.ts": """
+
+import express, { Application, Request, Response } from 'express';
+
+import cors from 'cors';
+
+import dotenv from 'dotenv';
+
+import indexRoutes from './routes/indexRoutes';
+
+import { errorHandler } from './middleware/errorHandler';
+
+
+
+dotenv.config();
+
+
+
+const app: Application = express();
+
+app.use(cors());
+
+app.use(express.json());
+
+
+
+// Routes
+
+app.use('/api', indexRoutes);
+
+
+
+// Health check
+
+app.get('/', (_req: Request, res: Response) => {
+
+  res.send('Easymoto Backend is running!');
+
+});
+
+
+
+// Global error handler
+
+app.use(errorHandler);
+
+
+
+const PORT = process.env.PORT || 3000;
+
+app.listen(PORT, () => {
+
+  console.log(`Server is running on port ${PORT}`);
+
+});
+
+""",
+
+    "src/routes/indexRoutes.ts": """
+
+import { Router } from 'express';
+
+import { getStatus } from '../controllers/indexController';
+
+
+
+const router = Router();
+
+
+
+router.get('/status', getStatus);
+
+
+
+export default router;
+
+""",
+
+    "src/controllers/indexController.ts": """
+
+import { Request, Response, NextFunction } from 'express';
+
+import { getStatusService } from '../services/indexService';
+
+
+
+export const getStatus = (req: Request, res: Response, next: NextFunction) => {
+
+  try {
+
+    const status = getStatusService();
+
+    res.json({ status });
+
+  } catch (err) {
+
+    next(err);
+
+  }
+
+};
+
+""",
+
+    "src/services/indexService.ts": """
+
+export const getStatusService = () => {
+
+  return 'Easymoto backend is operational';
+
+};
+
+""",
+
+    "src/middleware/errorHandler.ts": """
+
+import { Request, Response, NextFunction } from 'express';
+
+
+
+export const errorHandler = (
+
+  err: Error,
+
+  _req: Request,
+
+  res: Response,
+
+  _next: NextFunction
+
+) => {
+
+  console.error(err.stack);
+
+  res.status(500).json({ error: err.message || 'Internal Server Error' });
+
+};
+
+""",
+
+    "src/utils/logger.ts": """
+
+export const log = (message: string) => {
+
+  console.log(`[Easymoto] ${message}`);
+
+};
+
+""",
+
+    "src/config/appConfig.ts": """
+
+export const config = {
+
+  appName: 'Easymoto Backend',
+
+  port: process.env.PORT || 3000
+
+};
+
+"""
+
+}
+
+
+
+# Create zip file for the enterprise-ready backend
+
+enterprise_zip_filename = '/mnt/data/easymoto_backend_enterprise_ready.zip'
+
+with zipfile.ZipFile(enterprise_zip_filename, 'w') as zipf:
+
+    for path, content in enterprise_project_files.items():
+
+        zipf.writestr(path, content.strip())
+
+
+
+enterprise_zip_filename
