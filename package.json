@@ -1,0 +1,72 @@
+{
+  "dependencies": {
+    "tsc": "^2.0.4",
+    "typescript": "^5.9.3"
+  }
+
+
+{
+  "name": "easymoto-backend
+      "version": "1.0.0",    "version": "1.0.0",    "version": "1.0.0",
+      "description": "Backend for Easymoto delivery, travel, and logistics platform",
+        "main": "dist/index.js",
+          "scripts": {
+              "clean": "rm -rf dist",
+                  "build": "npm run clean && tsc",
+                      "start": "node dist/index.js",
+                          "dev": "npm run lint && ts-node-dev --respawn --transpile-only --ignore-watch node_modules --poll src/index.ts",
+                              "lint": "eslint 'src/**/*.{ts,tsx}'",
+                                  "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
+                                      "prestart": "npm run build"
+                                        },
+                                          "keywords": ["easymoto", "delivery", "logistics", "backend"],
+                                            "author": "Your Name",
+                                              "license": "MIT",
+                                                "dependencies": {
+                                                    "express": "^4.18.2",
+                                                        "cors": "^2.8.5",
+                                                            "dotenv": "^16.3.1"
+                                                              },
+                                                                "devDependencies": {
+                                                                    "typescript": "^5.2.2",
+                                                                        "ts-node-dev": "^2.0.0",
+                                                                            "@types/node": "^20.5.9",
+                                                                                "@types/express": "^4.17.19",
+                                                                                    "eslint": "^8.50.0",
+                                                                                        "@typescript-eslint/parser": "^6.3.0",
+                                                                                            "@typescript-eslint/eslint-plugin": "^6.3.0"
+                                                                                              }
+                                                                                              package.json
+
+                                                                                              {
+                                                                                                "name": "easymoto-backend",
+                                                                                                  "version": "1.0.0",
+                                                                                                    "description": "Backend for Easymoto delivery, travel, and logistics platform",
+                                                                                                      "main": "dist/index.js",
+                                                                                                        "scripts": {
+                                                                                                            "clean": "rm -rf dist",
+                                                                                                                "build": "npm run clean && tsc",
+                                                                                                                    "start": "node dist/index.js",
+                                                                                                                        "dev": "npm run lint && ts-node-dev --respawn --transpile-only --ignore-watch node_modules --poll src/index.ts",
+                                                                                                                            "lint": "eslint 'src/**/*.{ts,tsx}'",
+                                                                                                                                "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
+                                                                                                                                    "prestart": "npm run build"
+                                                                                                                                      },
+                                                                                                                                        "keywords": ["easymoto", "delivery", "logistics", "backend"],
+                                                                                                                                          "author": "Your Name",
+                                                                                                                                            "license": "MIT",
+                                                                                                                                              "dependencies": {
+                                                                                                                                                  "express": "^4.18.2",
+                                                                                                                                                      "cors": "^2.8.5",
+                                                                                                                                                          "dotenv": "^16.3.1"
+                                                                                                                                                            },
+                                                                                                                                                              "devDependencies": {
+                                                                                                                                                                  "typescript": "^5.2.2",
+                                                                                                                                                                      "ts-node-dev": "^2.0.0",
+                                                                                                                                                                          "@types/node": "^20.5.9",
+                                                                                                                                                                              "@types/express": "^4.17.19",
+                                                                                                                                                                                  "eslint": "^8.50.0",
+                                                                                                                                                                                      "@typescript-eslint/parser": "^6.3.0",
+                                                                                                                                                                                          "@typescript-eslint/eslint-plugin": "^6.3.0"
+                                                                                                                                                                                            }
+                                                                                                                                                                                            }
