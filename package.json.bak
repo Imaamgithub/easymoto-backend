@@ -1,0 +1,44 @@
+{
+  "name": "easymoto-backend",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "scripts": {
+    "dev": "nodemon --watch src --exec ts-node src/index.ts",
+    "build": "tsc",
+    "start": "node dist/index.js"
+  },
+  "dependencies": {
+    "express": "^4.19.0"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^20.11.17",
+    "nodemon": "^3.0.0",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.9.0"
+  }
+}
+src
+ ├── app.ts
+  ├── server.ts
+   ├── config/
+    │    └── env.ts
+     ├── controllers/
+      │    ├── root.controller.ts
+       │    ├── hello.controller.ts
+        │    ├── orders.controller.ts
+         │    └── riders.controller.ts
+          ├── routes/
+           │    ├── index.routes.ts
+            │    ├── orders.routes.ts
+             │    └── riders.routes.ts
+              ├── services/
+               │    ├── orders.service.ts
+                │    └── riders.service.ts
+                 ├── middleware/
+                  │    ├── error.middleware.ts
+                   │    └── notFound.middleware.ts
+                    ├── utils/
+                     │    └── logger.ts
+                      └── types/
+                            └── express.d.ts
