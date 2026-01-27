@@ -1,11 +1,16 @@
 import express from "express";
-import routes from "./routes/index.routes";
+import orderIntelligenceRoutes from "./services/intelligence/orderIntelligence.routes";
 
 const app = express();
 
 app.use(express.json());
 
-// Register all routes
-app.use("/", routes);
+app.use("/intelligence", orderIntelligenceRoutes);
 
 export default app;
+
+import healthRoutes from "./health/health.routes";
+import readyRoutes from "./health/ready.routes";
+
+app.use(healthRoutes);
+app.use(readyRoutes);

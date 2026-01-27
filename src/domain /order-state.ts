@@ -1,0 +1,7 @@
+export enum OrderState {
+  CREATED = "CREATED",
+  ASSIGNED = "ASSIGNED",
+  PICKED_UP = "PICKED_UP",
+  DELIVERED = "DELIVERED",
+  CANCELLED = "CANCELLED"
+}
