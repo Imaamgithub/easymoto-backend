@@ -11,6 +11,8 @@ enum OrderState {
   CREATED
   ASSIGNED
   ACCEPTED
+  ANALYZED
+  CONFIRMED
   PICKED_UP
   DELIVERED
   CANCELLED
@@ -38,7 +40,8 @@ model Order {
   state           OrderState
   riderId         String?
   rider           Rider?     @relation(fields: [riderId], references: [id])
-  createdAt       DateTime   @default(now())
+   demo            Boolean  @default(false)
+  createdAt       DateTime @default(now())
 }
 
 enum Role {
@@ -51,4 +54,15 @@ model User {
   id    String @id @default(uuid())
   email String @unique
   role  Role
+}
+
+model IdempotencyKey {
+  key          String   @id
+  requestHash String
+  response     Json
+  status       Int
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+
+  @@index([expiresAt])
 }

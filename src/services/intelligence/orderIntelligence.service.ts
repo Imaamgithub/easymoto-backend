@@ -2,10 +2,13 @@
 import { prisma } from "../../config/prisma";
 import { OrderState } from "../../domain /order-state";
 import { eventBus } from "../../events/eventBus";
+import { retry } from "../../utils/retry";
 
 export class OrderIntelligenceService {
   static async getOrderHealth(orderId: string) {
-    const order = await prisma.order.findUnique({ where: { id: orderId } });
+    const order = await retry(() =>
+      prisma.order.findUnique({ where: { id: orderId } })
+    );
     if (!order) throw new Error("Order not found");
 
     const now = Date.now();
@@ -41,3 +44,5 @@ export class OrderIntelligenceService {
     return payload;
   }
 }
+
+// removed stray top-level retry usage

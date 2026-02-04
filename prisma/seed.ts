@@ -3,15 +3,16 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 async function main() {
-  await prisma.order.create({
-    data: {
+  await prisma.order.upsert({
+    where: { id: "123" },
+    update: {}, // no-op if exists
+    create: {
       id: "123",
       state: "CREATED",
-
-      customerName: "Imam Ahmad",
+      customerName: "Test Customer",
       customerPhone: "+251900000000",
-      pickupAddress: "Bole, Addis Ababa",
-      deliveryAddress: "Piassa, Addis Ababa",
+      pickupAddress: "Addis Ababa",
+      deliveryAddress: "Bole, Addis Ababa",
     },
   });
 }
