@@ -7,15 +7,40 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
 model Rider {
   id        String   @id @default(uuid())
   name      String
   phone     String   @unique
   createdAt DateTime @default(now())
+=======
+enum OrderState {
+  CREATED
+  ASSIGNED
+  ACCEPTED
+  ANALYZED
+  CONFIRMED
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+}
+
+enum RiderStatus {
+  OFFLINE
+  AVAILABLE
+  BUSY
+}
+
+model Rider {
+  id        String      @id @default(uuid())
+  name      String
+  status    RiderStatus
+>>>>>>> backup/wip-1765743428
   orders    Order[]
 }
 
 model Order {
+<<<<<<< HEAD
   id        String   @id @default(uuid())
   pickup    String
   dropoff   String
@@ -24,3 +49,39 @@ model Order {
   riderId   String?
   rider     Rider?   @relation(fields: [riderId], references: [id])
 }
+=======
+  id              String     @id @default(uuid())
+  customerName    String
+  customerPhone   String
+  pickupAddress   String
+  deliveryAddress String
+  state           OrderState
+  riderId         String?
+  rider           Rider?     @relation(fields: [riderId], references: [id])
+   demo            Boolean  @default(false)
+  createdAt       DateTime @default(now())
+}
+
+enum Role {
+  ADMIN
+  OPERATOR
+  CUSTOMER
+}
+
+model User {
+  id    String @id @default(uuid())
+  email String @unique
+  role  Role
+}
+
+model IdempotencyKey {
+  key          String   @id
+  requestHash String
+  response     Json
+  status       Int
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
+
+  @@index([expiresAt])
+}
+>>>>>>> backup/wip-1765743428
