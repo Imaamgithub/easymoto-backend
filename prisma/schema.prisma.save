@@ -1,3 +1,5 @@
+CTRL + O → Enter
+'/workspaces/easymoto-backend/prisma/schema.prisma'
 generator client {
   provider = "prisma-client-js"
 }
@@ -7,6 +9,13 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+<<<<<<< HEAD
+model Rider {
+  id        String   @id @default(uuid())
+  name      String
+  phone     String   @unique
+  createdAt DateTime @default(now())
+=======
 enum OrderState {
   CREATED
   ASSIGNED
@@ -25,10 +34,11 @@ enum RiderStatus {
 }
 
 model Rider {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   name      String
   status    RiderStatus
-  createdAt DateTime @default(now())
+>>>>>>> backup/wip-1765743428
+  orders    Order[]
 }
 
 model Order {
@@ -64,4 +74,4 @@ model IdempotencyKey {
 
   @@index([expiresAt])
 }
-
+>>>>>>> backup/wip-1765743428
