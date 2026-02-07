@@ -1,23 +1,19 @@
 import express from "express";
-<<<<<<< HEAD
+
 import routes from "./routes/index.routes";
-=======
+
 import orderIntelligenceRoutes from "./services/intelligence/orderIntelligence.routes";
->>>>>>> backup/wip-1765743428
 
 const app = express();
 
 app.use(express.json());
 
-<<<<<<< HEAD
 // Register all routes
 app.use("/", routes);
 
 export default app;
-=======
 app.use("/intelligence", orderIntelligenceRoutes);
 
-export default app;
 
 import healthRoutes from "./health/health.routes";
 import readyRoutes from "./health/ready.routes";
@@ -39,5 +35,4 @@ app.get("/metrics", async (_req, res) => {
 });
 
 import demoRoutes from "./routes/demo.routes";
-app.use("/demo", demoRoutes);
->>>>>>> backup/wip-1765743428
+app.use("/api", demoRoutes);
