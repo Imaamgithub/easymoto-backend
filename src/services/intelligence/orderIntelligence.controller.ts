@@ -6,7 +6,7 @@ import { intelligenceQueue } from "../../queues/intelligence.queue";
 export const getOrderHealth = async (req: Request, res: Response) => {
   try {
     const data = await OrderIntelligenceService.getOrderHealth(
-      req.params.id
+      String(req.params.id)
     );
     await intelligenceQueue.add("analyze-order", {
       orderId: req.params.id,
