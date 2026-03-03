@@ -1,0 +1,25 @@
+
+global:
+  scrape_interval: 15s
+
+scrape_configs:
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
+
+global:
+  scrape_interval: 5s
+
+scrape_configs:
+  - job_name: "easymoto"
+    static_configs:
+      - targets: ["host.docker.internal:4000"]
+
+
+      prometheus:
+  image: prom/prometheus
+  container_name: prometheus
+  ports:
+    - "9090:9090"
+  volumes:
+    - ./prometheus.yml:/etc/prometheus/prometheus.yml
