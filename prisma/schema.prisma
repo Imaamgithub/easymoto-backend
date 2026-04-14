@@ -7,28 +7,26 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-enum OrderState {
-  CREATED
-  ASSIGNED
-  ACCEPTED
-  ANALYZED
-  CONFIRMED
-  PICKED_UP
-  DELIVERED
-  CANCELLED
-}
-
-enum RiderStatus {
-  OFFLINE
-  AVAILABLE
-  BUSY
-}
 
 model Rider {
-  id        String   @id @default(uuid())
-  name      String
-  status    RiderStatus
-  createdAt DateTime @default(now())
+  id                String      @id @default(uuid())
+  name              String
+  status            RiderStatus
+  createdAt         DateTime    @default(now())
+  isAvailable       Boolean     @default(true)
+  latitude          Float?
+  longitude         Float?
+  phone             String      @unique
+  rating            Float       @default(5)
+  tier              RiderTier   @default(BRONZE)
+  acceptedOrders    Int         @default(0)
+  cancelledOrders   Int         @default(0)
+  completedOrders   Int         @default(0)
+  customerRatingAvg Float       @default(5)
+  onTimeDeliveries  Int         @default(0)
+  performanceScore  Float       @default(0)
+  totalOrders       Int         @default(0)
+  Order             Order[]
 }
 
 model Order {
@@ -39,7 +37,57 @@ model Order {
   deliveryAddress String
   state           OrderState @default(CREATED)
   demo            Boolean    @default(false)
+  pickupLat       Float
+  pickupLng       Float
+  amount          Float
+  customerId      String
+  deliveryLat     Float
+  deliveryLng     Float
+  riderId         String?
+  Rider           Rider?     @relation(fields: [riderId], references: [id])
   createdAt       DateTime   @default(now())
+  updateDate      DateTime   @updatedAt()
+}
+
+model IdempotencyKey {
+  key         String   @id
+  requestHash String
+  response    Json
+  status      Int
+  createdAt   DateTime @default(now())
+  expiresAt   DateTime
+
+  @@index([expiresAt])
+}
+
+model User {
+  id    String @id
+  email String @unique
+  role  Role
+}
+
+enum OrderState {
+  CREATED
+  ASSIGNED
+  ACCEPTED
+  ANALYZED
+  CONFIRMED
+  PICKED_UP
+  DELIVERED
+  CANCELLED
+  PENDING
+}
+
+enum RiderStatus {
+  OFFLINE
+  AVAILABLE
+  BUSY
+}
+
+enum RiderTier {
+  BRONZE
+  SILVER
+  GOLD
 }
 
 enum Role {
@@ -47,21 +95,3 @@ enum Role {
   OPERATOR
   CUSTOMER
 }
-
-model User {
-  id    String @id @default(uuid())
-  email String @unique
-  role  Role
-}
-
-model IdempotencyKey {
-  key          String   @id
-  requestHash String
-  response     Json
-  status       Int
-  createdAt    DateTime @default(now())
-  expiresAt    DateTime
-
-  @@index([expiresAt])
-}
-

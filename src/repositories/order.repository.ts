@@ -10,18 +10,24 @@ export class OrderRepository {
     demo?: boolean;
   }) {
     return prisma.order.create({
-      data: {
-        customerName: data.customerName,
-        customerPhone: data.customerPhone ?? "0000000000",
-        pickupAddress: data.pickupAddress,
-        deliveryAddress: data.deliveryAddress,
-        state: OrderState.CREATED,
-        demo: data.demo ?? false,
-      },
-    });
-  }
+    data: {
+  customerId: "demo-user",
+  customerName: "Test Customer",
+  customerPhone: "123456789",
+  amount: 100,
+  pickupAddress: "Restaurant A",
+  deliveryAddress: "Customer Home",
+  pickupLat: 40.7128,
+  pickupLng: -74.0060,
+  deliveryLat: 40.7138,
+  deliveryLng: -74.0070,
+  state: "CREATED",
+demo: true
+    }
+});
+}
 
-  static async assign(orderId: string) {
+static async assign(orderId: string) {
     return prisma.order.update({
       where: { id: orderId },
       data: { state: OrderState.ASSIGNED },
@@ -33,5 +39,5 @@ export class OrderRepository {
       where: { id: orderId },
       data: { state },
     });
-  }
+  };
 }

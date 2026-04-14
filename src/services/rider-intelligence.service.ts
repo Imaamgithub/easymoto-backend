@@ -1,55 +1,62 @@
-import { prisma } from "../prisma.schema";
-export const RiderIntelligenceService = {
-  async calculateScore(riderId: string) {
-    const rider = await prisma.rider.findUnique({
-      where: { id: riderId },
-    });
+import prisma from "../lib/prisma";
+import { riderPerformanceGauge } from "../metrics/business.metrics";
 
-    if (!rider) throw new Error("Rider not found");
+export async function calculateRiderPerformance() {
 
-    const onTimeRate =
-      rider.totalOrders === 0
-        ? 0
-        : rider.onTimeDeliveries / rider.totalOrders;
+  const riders = await prisma.rider.findMany();
+
+  for (const rider of riders) {
+
+    const totalOrders = rider.totalOrders || 1;
 
     const acceptanceRate =
-      rider.totalOrders === 0
-        ? 0
-        : rider.acceptedOrders / rider.totalOrders;
+      rider.acceptedOrders / totalOrders;
 
     const completionRate =
-      rider.totalOrders === 0
-        ? 0
-        : rider.completedOrders / rider.totalOrders;
+      rider.completedOrders / totalOrders;
 
-    const cancellationRate =
-      rider.totalOrders === 0
-        ? 0
-        : rider.cancelledOrders / rider.totalOrders;
+    const cancelRate =
+      rider.cancelledOrders / totalOrders;
 
-    const ratingNormalized = rider.customerRatingAvg / 5;
+    const onTimeRate =
+      rider.onTimeDeliveries / totalOrders;
 
-    let score =
-      0.35 * onTimeRate +
-      0.20 * acceptanceRate +
-      0.20 * completionRate +
-      0.15 * ratingNormalized -
-      0.10 * cancellationRate;
+    const ratingScore = rider.customerRatingAvg / 5;
 
-    score = Math.max(0, Math.min(score, 1));
-
-    const finalScore = score * 100;
+    const finalScore =
+      acceptanceRate * 0.25 +
+      completionRate * 0.25 +
+      onTimeRate * 0.25 +
+      ratingScore * 0.25 -
+      cancelRate * 0.1;
 
     await prisma.rider.update({
-      where: { id: riderId },
-      data: { performanceScore: finalScore },
+      where: { id: rider.id },
+      data: {
+        performanceScore: finalScore
+      }
     });
+  }
+}
 
-    return finalScore;
-  },
-};
+export async function updateRiderPerformanceGauge() {
+  const riders = await prisma.rider.findMany()
 
-import { riderPerformanceGauge } from "../observability/metrics";
+  for (const rider of riders) {
+    const distance = Math.sqrt(
+      (rider.latitude || 0) ** 2 + (rider.longitude || 0) ** 2
+    );
+    const distanceScore = 1 / (distance + 1);
 
-await prisma.rider.update({ where:{id:riderId}, data:{ performanceScore: finalScore }});
-riderPerformanceGauge.set({ riderId, riderName: rider.name || "" }, finalScore);
+    const ratingScore = rider.rating || 5;
+
+    const finalScore = distanceScore + ratingScore;
+
+    riderPerformanceGauge.set(
+      { riderId: rider.id },
+      finalScore
+    );
+  }
+}
+
+

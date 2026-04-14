@@ -1,16 +1,25 @@
-version: '3.8'
+version: "3.9"
+
 services:
   postgres:
     image: postgres:15
     container_name: easymoto-postgres
+    restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: easymoto
     ports:
-      - "5432:5432"
+      - "5433:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
 
   redis:
     image: redis:7
+    container_name: easymoto-redis
+    restart: always
     ports:
       - "6379:6379"
+
+volumes:
+  postgres_data:

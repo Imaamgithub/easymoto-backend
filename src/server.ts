@@ -11,6 +11,9 @@ app.get("/", (req, res) => {
 
 const PORT = config.PORT || 3000;
 
+const riderRoutes = require("./routes/riders");
+app.use("/riders", riderRoutes);
+
 app.listen(PORT, () => {
-  console.log(`EasyMoto Backend running on http://localhost:${PORT}`);
+  console.log(`🚀 EasyMoto Backend running on http://localhost:${PORT}`);
 });
